@@ -20,7 +20,7 @@ var login = function(req, res, next) {
         console.log('看看我查询到的用户', data);
         if (data.length === 1) {
             // 查到用户 允许登录
-            var token = myJwt.signToken();
+            var token = myJwt.signToken(req.body.username);
             res.json({
                 code: 200,
                 token: token,

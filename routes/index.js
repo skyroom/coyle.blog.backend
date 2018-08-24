@@ -17,15 +17,17 @@ router.use(function timeLog(req, res, next) {
     var token = req.headers['token'];
     console.log('我拿到的token is ', token);
     var verifyResult = myJwt.verifyToken(token);
-    if (!verifyResult) {
-        res.status(401);
+    verifyResult
+    .then((decoded) => {
+        console.log('decoded is ', decoded);
+        next();
+    })
+    .catch(() => {
         res.json({
+            code: 401,
             msg: '没有登录'
         });
-    } else {
-        console.log('我验证的token is' , verifyResult);
-        next();
-    }
+    });
 });
 
 // 后台获取文章列表
