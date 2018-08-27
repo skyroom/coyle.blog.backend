@@ -10,6 +10,7 @@
 
 
 // 此文件主要处理首页请求-文章列表
+var Article = require('../models/articles');
 
 // 前台获取文章预览列表
 var getArticleViewByFront = function(req, res, next) {
@@ -23,13 +24,53 @@ var getArticleListByFront = function(req, res, next) {
 
 // 后台获取文章列表
 var getArticleListByBack = function(req, res, next) {
-    res.send('这是后台获取文章列表接口');
+    Article.getArticleListByBack()
+    .then((data) => {
+        res.json({
+            code: 200,
+            data: data,
+            msg: ''
+        });
+    })
+    .catch((err) => {
+        console.log('后台获取文章列表发生错误', err);
+        res.json({
+            code: 500,
+            msg: err,
+        });
+    });
+}
+
+// 后台添加文章
+var addArticleListByBack = function(req, res, next) {
+    console.log('添加文章的body is', req.body);
+    Article.addArticle(req.body)
+    .then((data) => {
+        res.json({
+            code: 200,
+            msg: ''
+        });
+    })
+    .catch((err) => {
+        console.log('后台添加文章发生错误', String(err));
+        if (String(err).indexOf('duplicate key') > -1) {
+            res.json({
+                code: 400,
+                msg: '标题重复，请更改标题',
+            });
+        }
+        res.json({
+            code: 500,
+            msg: err,
+        });
+    });
 }
 
 module.exports = {
     getArticleViewByFront: getArticleViewByFront,
     getArticleListByFront: getArticleListByFront,
     getArticleListByBack: getArticleListByBack,
+    addArticleListByBack: addArticleListByBack,
 };
 
 // router.get('/', function(req, res, next) {

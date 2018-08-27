@@ -20,7 +20,18 @@ router.use(function timeLog(req, res, next) {
     verifyResult
     .then((decoded) => {
         console.log('decoded is ', decoded);
-        next();
+        var current = Date.now();
+        console.log('现在的时间是: ', current);
+        console.log('过期的时间是: ', decoded.exp * 1000)
+        if (current >= decoded.exp * 1000) {
+            // 说明token过期
+            res.json({
+                code: 401,
+                msg: '没有登录'
+            });
+        } else {
+            next();
+        }
     })
     .catch(() => {
         res.json({
@@ -32,5 +43,8 @@ router.use(function timeLog(req, res, next) {
 
 // 后台获取文章列表
 router.get('/back/articles-list', require('./articles').getArticleListByBack);
+
+// 后台添加文章
+router.post('/back/article', require('./articles').addArticleListByBack);
 
 module.exports = router;
