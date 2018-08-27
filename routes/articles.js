@@ -66,11 +66,31 @@ var addArticleListByBack = function(req, res, next) {
     });
 }
 
+// 删除文章
+var deleteArticleListByBack = function(req, res, next) {
+    console.log('删除文章的id is', req.params.id);
+    Article.deleteArticle(req.params.id)
+    .then((data) => {
+        res.json({
+            code: 200,
+            msg: ''
+        });
+    })
+    .catch((err) => {
+        console.log('后台删除文章发生错误', String(err));
+        res.json({
+            code: 500,
+            msg: err,
+        });
+    });
+}
+
 module.exports = {
     getArticleViewByFront: getArticleViewByFront,
     getArticleListByFront: getArticleListByFront,
     getArticleListByBack: getArticleListByBack,
     addArticleListByBack: addArticleListByBack,
+    deleteArticleListByBack: deleteArticleListByBack,
 };
 
 // router.get('/', function(req, res, next) {

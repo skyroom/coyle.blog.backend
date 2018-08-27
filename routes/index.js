@@ -47,4 +47,7 @@ router.get('/back/articles-list', require('./articles').getArticleListByBack);
 // 后台添加文章
 router.post('/back/article', require('./articles').addArticleListByBack);
 
+// 后台删除文章
+router.delete('/back/article/:id', require('./articles').deleteArticleListByBack);
+
 module.exports = router;

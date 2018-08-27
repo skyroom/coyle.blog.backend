@@ -1,3 +1,4 @@
+var { ObjectID } = require('mongolass');
 var Article = require('../lib/mongo').Article;
 
 module.exports = {
@@ -30,6 +31,21 @@ module.exports = {
                 return Promise.resolve(result);
             })
             .catch((err) => {
+                return Promise.reject(err);
+            })
+    },
+    deleteArticle: (id) => {
+        return Article
+            .deleteOne({
+                _id: new ObjectID(id),
+            })
+            .exec()
+            .then((result) => {
+                console.log('删除的结果是111', result);
+                return Promise.resolve(result);
+            })
+            .catch((err) => {
+                console.log('删除错误的结果是111', result);
                 return Promise.reject(err);
             })
     },
