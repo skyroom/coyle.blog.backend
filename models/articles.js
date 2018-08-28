@@ -22,9 +22,20 @@ module.exports = {
                 return Promise.reject(err);
             })
     },
-    getArticleListByBack: () => {
+    getArticleListByBack: (params) => {
+        let filter = {};
+        for (var key in params) {
+            if (params[key]) {
+                if (key === 'id') {
+                    filter._id = new ObjectID(params[key]);
+                }
+                if (key === 'title') {
+                    filter.title = new RegExp(params[key]);
+                }
+            }
+        }
         return Article
-            .find()
+            .find(filter)
             .exec()
             .then((result) => {
                 // console.log('获取的结果是111', result);
@@ -46,6 +57,58 @@ module.exports = {
             })
             .catch((err) => {
                 console.log('删除错误的结果是111', result);
+                return Promise.reject(err);
+            })
+    },
+    editArticle: (id, data) => {
+        return Article
+            .updateOne({
+                _id: new ObjectID(id),
+            }, {
+                $set: data
+            })
+            .exec()
+            .then((result) => {
+                console.log('编辑的结果是111', result);
+                return Promise.resolve(result);
+            })
+            .catch((err) => {
+                console.log('编辑错误的结果是111', err);
+                return Promise.reject(err);
+            })
+    },
+    getArticleViewByFront: (title) => {
+        console.log('title is ', title);
+        let filter = {}
+        if (title) {
+            filter = {
+                title: new RegExp(title),
+            };
+        }
+        return Article
+            .find(filter)
+            .exec()
+            .then((result) => {
+                console.log('前台获取的文章结果是111', result);
+                return Promise.resolve(result);
+            })
+            .catch((err) => {
+                return Promise.reject(err);
+            })
+    },
+    getArticleByFront: (id) => {
+        console.log('前台文章详情id is ', id);
+        let filter = {
+            _id: new ObjectID(id),
+        }
+        return Article
+            .findOne(filter)
+            .exec()
+            .then((result) => {
+                console.log('前台获取的文章详情是111', result);
+                return Promise.resolve(result);
+            })
+            .catch((err) => {
                 return Promise.reject(err);
             })
     },

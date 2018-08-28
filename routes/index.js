@@ -3,10 +3,13 @@ var router = express.Router();
 var myJwt = require('../lib/jsonwebtoken');
 
 // 首页 文章预览接口
-router.get('/articles-view', require('./articles').getArticleViewByFront);
+router.post('/articles-view', require('./articles').getArticleViewByFront);
 
 // 文章列表接口
 router.get('/articles-list', require('./articles').getArticleListByFront);
+
+// 文章详情接口
+router.get('/article/:id', require('./articles').getArticleByFront);
 
 // 登录
 router.post('/back/login', require('./user').login);
@@ -42,12 +45,15 @@ router.use(function timeLog(req, res, next) {
 });
 
 // 后台获取文章列表
-router.get('/back/articles-list', require('./articles').getArticleListByBack);
+router.post('/back/articles-list', require('./articles').getArticleListByBack);
 
 // 后台添加文章
 router.post('/back/article', require('./articles').addArticleListByBack);
 
 // 后台删除文章
 router.delete('/back/article/:id', require('./articles').deleteArticleListByBack);
+
+// 后台编辑文章
+router.put('/back/article/:id', require('./articles').editArticleListByBack);
 
 module.exports = router;

@@ -14,7 +14,21 @@ var Article = require('../models/articles');
 
 // 前台获取文章预览列表
 var getArticleViewByFront = function(req, res, next) {
-    res.send('这是首页-文章预览接口');
+    Article.getArticleViewByFront(req.body.title || '')
+    .then((data) => {
+        res.json({
+            code: 200,
+            data: data,
+            msg: ''
+        });
+    })
+    .catch((err) => {
+        console.log('前台获取文章列表发生错误', err);
+        res.json({
+            code: 500,
+            msg: err,
+        });
+    });
 }
 
 // 前台获取文章列表
@@ -22,9 +36,30 @@ var getArticleListByFront = function(req, res, next) {
     res.send('这是首页列表接口');
 }
 
+// 前台获取文章详情
+var getArticleByFront = function(req, res, next) {
+    console.log('前台获取文章详情的id is', req.params.id);
+    Article.getArticleByFront(req.params.id)
+    .then((data) => {
+        res.json({
+            code: 200,
+            data: data,
+            msg: ''
+        });
+    })
+    .catch((err) => {
+        console.log('前台获取文章列表发生错误', err);
+        res.json({
+            code: 500,
+            msg: err,
+        });
+    });
+}
+
+
 // 后台获取文章列表
 var getArticleListByBack = function(req, res, next) {
-    Article.getArticleListByBack()
+    Article.getArticleListByBack(req.body || {})
     .then((data) => {
         res.json({
             code: 200,
@@ -85,12 +120,34 @@ var deleteArticleListByBack = function(req, res, next) {
     });
 }
 
+// 编辑文章
+var editArticleListByBack = function(req, res, next) {
+    console.log('编辑文章的id is', req.params.id);
+    console.log('编辑文章的body is', req.body);
+    Article.editArticle(req.params.id, req.body)
+    .then((data) => {
+        res.json({
+            code: 200,
+            msg: ''
+        });
+    })
+    .catch((err) => {
+        console.log('后台编辑文章发生错误', String(err));
+        res.json({
+            code: 500,
+            msg: err,
+        });
+    });
+}
+
 module.exports = {
     getArticleViewByFront: getArticleViewByFront,
     getArticleListByFront: getArticleListByFront,
+    getArticleByFront: getArticleByFront,
     getArticleListByBack: getArticleListByBack,
     addArticleListByBack: addArticleListByBack,
     deleteArticleListByBack: deleteArticleListByBack,
+    editArticleListByBack: editArticleListByBack,
 };
 
 // router.get('/', function(req, res, next) {
