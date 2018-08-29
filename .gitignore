@@ -24,3 +24,5 @@ yarn-error.log*
 *.sw*
 
 build/env.js
+
+public
