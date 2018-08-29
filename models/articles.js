@@ -36,6 +36,7 @@ module.exports = {
         }
         return Article
             .find(filter)
+            .sort({ _id: -1 })
             .exec()
             .then((result) => {
                 // console.log('获取的结果是111', result);
@@ -87,6 +88,7 @@ module.exports = {
         }
         return Article
             .find(filter)
+            .sort({ _id: -1 })
             .exec()
             .then((result) => {
                 console.log('前台获取的文章结果是111', result);
